@@ -4,6 +4,7 @@ import { ChatInput } from "@/components/ChatInput";
 import { Chat } from "@/components/Chat";
 import Image from "next/image";
 import { getChatResponse } from "@/services/dummy_server";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
@@ -19,6 +20,15 @@ export default function Home() {
     ]);
   }
 
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat when messages change
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [messages]);
+
   async function handleChatInput(input) {
     console.log("Chat input: " + input);
     addMessage(input, false);
@@ -27,12 +37,13 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       <div className="flex-1 overflow-y-auto">
         <Chat messages={messages} />
       </div>
       <div className="sticky bottom-0 w-full">
         <ChatInput onSubmit={handleChatInput} />
+        <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
       </div>
     </div>
   );
