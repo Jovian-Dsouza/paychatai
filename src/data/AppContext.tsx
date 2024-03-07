@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext } from "react";
-import { usePayments } from "@/app/hooks/usePayments";
+import { usePayments } from "@/hooks/usePayments";
 
 export const AppContext = createContext();
 
