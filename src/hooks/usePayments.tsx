@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Payments } from "@nevermined-io/payments";
 import { usePathname } from "next/navigation";
 
@@ -14,13 +14,11 @@ export function usePayments() {
       version: "v1",
     })
   );
-  const [payments, setPayments] = useState<Payments>(nvmRef.current);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const isLoggedIn = useMemo(()=> nvmRef.current.isLoggedIn, [nvmRef.current.isLoggedIn]);
   const [sessionKey, setSessionKey] = useState<String>("");
 
   useEffect(() => {
     nvmRef.current.init();
-    setPayments(nvmRef.current);
 
     let storedState = sessionStorage.getItem(SESSION_STORAGE_KEY);
     storedState = storedState ? JSON.parse(storedState) : false
@@ -30,15 +28,14 @@ export function usePayments() {
   }, []);
 
   useEffect(() => {
-    if (payments.isLoggedIn) {
-      setIsLoggedIn(true);
-      setSessionKey(payments.sessionKey);
+    if (nvmRef.current.isLoggedIn) {
+      setSessionKey(nvmRef.current.sessionKey);
     }
-  }, [payments.isLoggedIn]);
-
-  useEffect(() => {
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(isLoggedIn));
-  }, [isLoggedIn]);
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEY,
+      JSON.stringify(nvmRef.current.isLoggedIn)
+    );
+  }, [nvmRef.current.isLoggedIn]);
 
   const login = () => {
     nvmRef.current.connect();
@@ -46,47 +43,55 @@ export function usePayments() {
 
   const logout = () => {
     nvmRef.current.logout();
-    setPayments(nvmRef.current);
-    setIsLoggedIn(payments.isLoggedIn);
   };
 
-  const goToServiceDetails = (did: String) => {
-    payments.getServiceDetails(did);
+  const goToServiceDetails = (did: string) => {
+    nvmRef.current.getServiceDetails(did);
   };
 
   async function createService(
-    name: String,
-    description: String,
-    endpoint: String,
-    modelId: String,
-    subscriptionDid: String
+    name: string,
+    description: string,
+    endpoint: string,
+    modelId: string,
+    subscriptionDid: string,
+    price: BigInt,
+    amountOfCredits: number,
+    duration: number,
   ) {
     console.log("creating webservice");
-    if (isLoggedIn) {
+    if (!isLoggedIn) {
       console.error("CreateService: User Not logged in");
+      login()
+    }
+    try {
+      const result = await nvmRef.current.createService({
+        subscriptionDid: subscriptionDid,
+        name: name,
+        description: description,
+        price: price, //10000000n,   //10USDC // TODO Change this to get from user
+        tokenAddress: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+        serviceChargeType: "fixed",
+        authType: "oauth",
+        token: process.env.NEXT_PUBLIC_BEARER_TOKEN,
+        amountOfCredits: amountOfCredits,
+        duration: duration,
+        endpoints: [{ post: `${endpoint}/ai_service/${modelId}` }],
+        tags: ["llm"],
+        sampleLink: `${process.env.NEXT_PUBLIC_APP_URL}/chats/${modelId}`,
+        integration: `To integrate this API, send a POST request to https:<Nevermined_Proxy_url>/ai_service/${modelId} with a JSON object containing a "messages" array. \nInclude an Authorization header with your JWT token.`,
+      });
+      console.log(result);
+      return result.did;
+    } catch (error) {
+      console.error(error)
       return null;
     }
-    const result = await payments.createService({
-      subscriptionDid: subscriptionDid,
-      name: name,
-      description: description,
-      price: 0n, //10000000n,   //10USDC // TODO Change this to get from user
-      tokenAddress: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
-      serviceChargeType: "fixed",
-      authType: "oauth",
-      token: process.env.NEXT_PUBLIC_BEARER_TOKEN,
-      amountOfCredits: 1,
-      duration: 30,
-      endpoints: [{ post: `${endpoint}/ai_service/${modelId}` }],
-      tags: ["llm", "gpt"],
-      sampleLink: `${process.env.NEXT_PUBLIC_APP_URL}/chats/${modelId}`,
-      //   integration: `Chat with this endooint here: ${endpoint}`,
-    });
-    console.log(result);
-    return result.did;
+    
   }
 
   return {
+    nvmRef,
     login,
     logout,
     isLoggedIn,
