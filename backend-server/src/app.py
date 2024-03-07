@@ -66,9 +66,9 @@ def home():
 """
 curl -H "Authorization: Bearer 1234" -X GET "localhost:8000/model_list"
 """
-@app.get("/model_list")
+@app.post("/model_list")
 def model_list():
-    return openRouter.list_models()
+    return {"model_list": openRouter.list_models()}
 
 
 """

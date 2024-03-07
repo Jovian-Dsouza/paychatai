@@ -31,3 +31,8 @@
 ```
 poetry run uvicorn src.app:app --reload 
 ```
+
+3. Proxy using ngrok
+```
+ngrok http 8000
+```
