@@ -4,6 +4,7 @@ import "./globals.css";
 import { SideBar } from "@/components/SideBar";
 import { ClientProvider } from "@/components/ClientProvider";
 import Header from "@/components/Header";
+import { AppContextProvider } from "@/data/AppContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex flex-col h-screen">
           <ClientProvider />
-          <Header />
-          <div className="flex-1 bg-[#343541]">{children}</div>
+          <AppContextProvider>
+            <Header />
+            <div className="flex-1 bg-[#343541]">{children}</div>
+          </AppContextProvider>
         </div>
       </body>
     </html>
