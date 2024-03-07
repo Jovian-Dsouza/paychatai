@@ -1,50 +1,12 @@
 "use client";
-import { useState } from "react";
-import { ChatInput } from "@/components/ChatInput";
-import { Chat } from "@/components/Chat";
-import Image from "next/image";
-import { getChatResponse } from "@/services/dummy_server";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [messages, setMessages] = useState([]);
-
-  function addMessage(input, isSystemMessage) {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        id: prevMessages.length,
-        data: input,
-        img: !isSystemMessage ? "user_logo.png" : "icp_logo.jpeg",
-      },
-    ]);
-  }
-
-  const chatRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
-    // Scroll to the bottom of the chat when messages change
-    if (chatRef.current) {
-      chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  }, [messages]);
-
-  async function handleChatInput(input) {
-    console.log("Chat input: " + input);
-    addMessage(input, false);
-    const severMessage = await getChatResponse(messages);
-    addMessage(severMessage, true);
-  }
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="flex-1 overflow-y-auto">
-        <Chat messages={messages} />
-      </div>
-      <div className="sticky bottom-0 w-full">
-        <ChatInput onSubmit={handleChatInput} />
-        <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
-      </div>
-    </div>
-  );
-}
+    router.push("/create");
+  }, []);
+  return <div></div>;
+};
