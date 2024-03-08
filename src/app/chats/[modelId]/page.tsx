@@ -59,10 +59,19 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex-1 overflow-y-auto">
-        <Chat messages={messages} isLoading={isLoading} isError={isError} />
+        <Chat
+          messages={messages}
+          isLoading={isLoading}
+          isError={isError}
+          isLoggedIn={payments.isLoggedIn}
+        />
       </div>
       <div className="sticky bottom-0 w-full">
-        <ChatInput onSubmit={handleChatInput} isLoading={isLoading} />
+        <ChatInput
+          onSubmit={handleChatInput}
+          isLoading={isLoading}
+          isLoggedIn={payments.isLoggedIn}
+        />
         <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
       </div>
     </div>

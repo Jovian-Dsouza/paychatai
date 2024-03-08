@@ -1,7 +1,7 @@
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { FormEvent, useState, useRef } from "react";
 
-export function ChatInput({ onSubmit, isLoading }) {
+export function ChatInput({ onSubmit, isLoading, isLoggedIn }) {
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef(null);
 
@@ -25,7 +25,10 @@ export function ChatInput({ onSubmit, isLoading }) {
 
   return (
     <div className="bg-gray-700/50 text-gray-400 rounded-lg text-sm">
-      <form className="p-5 space-x-5 flex items-end" onSubmit={(e) => sendMessage(e)}>
+      <form
+        className="p-5 space-x-5 flex items-end"
+        onSubmit={(e) => sendMessage(e)}
+      >
         <textarea
           ref={textareaRef}
           value={prompt}
@@ -40,7 +43,7 @@ export function ChatInput({ onSubmit, isLoading }) {
         />
         <button
           type="submit"
-          disabled={!prompt || isLoading}
+          disabled={!prompt || isLoading || !isLoggedIn}
           className="bg-[#11A37F] hover:opacity-50 text-white font-bold px-4 py-2
                     rounded disabled:bg-gray-300 disabled:cursor-not-allowed h-10"
         >

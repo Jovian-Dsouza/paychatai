@@ -72,6 +72,16 @@ const Create = () => {
     })();
   }, []);
 
+  const [showTooltip, setShowTooltip] = useState(false);
+  const handleHover = () => {
+    if (!payments.isLoggedIn) {
+      setShowTooltip(true);
+    }
+  };
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
+
   return (
     <div className="flex flex-col mx-auto p-4">
       <TransactionModal show={showModal} showLoading={!modelDid}>
@@ -276,12 +286,26 @@ const Create = () => {
         </div>
 
         {/* Add more form fields for other inputs */}
-        <button
-          type="submit"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Create app
-        </button>
+        <div className="relative inline-block">
+          <button
+            type="submit"
+            disabled={!payments.isLoggedIn}
+            className={`py-2 px-4 rounded font-bold ${
+              payments.isLoggedIn
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-gray-400 cursor-not-allowed text-slate-800"
+            } transition duration-300 ease-in-out`}
+            onMouseOver={handleHover}
+            onMouseOut={handleMouseLeave}
+          >
+            Create app
+          </button>
+          {showTooltip && (
+            <span className="absolute top-0 left-full w-full ml-2 bg-gray-800 text-white text-xs py-1 px-2 rounded-md">
+              Please login to create app
+            </span>
+          )}
+        </div>
       </form>
     </div>
   );
