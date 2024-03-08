@@ -3,9 +3,10 @@ import { useCreateModel } from "@/hooks/useCreateModel";
 import React, { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/data/AppContext";
 import { TransactionModal } from "@/components/TransactionalModel";
+import { useRouter } from "next/navigation";
 
 const Create = () => {
-  // const aiModels = ["GPT-4 (OpenAI)", "Another Model", "Yet Another Model"]; // List of AI models
+  const router = useRouter();
   const [aiModels, setAiModels] = useState([]);
   const [showModal , setShowModal] = useState(false);
   const [modelDid, setModelDid] = useState(null)
@@ -98,6 +99,14 @@ const Create = () => {
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Check Model
+              </button>
+              <button
+                onClick={() => {
+                  router.push(`/chats/${modelDid}`);
+                }}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
+              >
+                Chat Now
               </button>
               <button
                 onClick={() => {
