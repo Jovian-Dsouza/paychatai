@@ -28,8 +28,15 @@
     ```
 
 2. Run the server
+
+### Development
 ```
 poetry run uvicorn src.app:app --reload 
+```
+
+### Production
+```
+poetry run gunicorn src.app:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:80
 ```
 
 3. Proxy using ngrok
