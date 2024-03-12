@@ -49,6 +49,24 @@ export function usePayments() {
     nvmRef.current.getServiceDetails(did);
   };
 
+  const getAssetDDO = async (did: string) => {
+    return await nvmRef.current.getAssetDDO(did)
+  }
+
+  const getServiceToken = async (did: string) => {
+    return await nvmRef.current.getServiceToken(did)
+  }
+
+  const getSubscriptionBalance = async (
+    subscriptionDid: string,
+    accountAddress?: string
+  ) => {
+    return await nvmRef.current.getSubscriptionBalance(
+      subscriptionDid,
+      accountAddress
+    );
+  };
+
   async function createService(
     name: string,
     description: string,
@@ -98,5 +116,8 @@ export function usePayments() {
     sessionKey,
     goToServiceDetails,
     createService,
+    getAssetDDO,
+    getServiceToken,
+    getSubscriptionBalance,
   };
 }
