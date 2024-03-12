@@ -106,17 +106,21 @@ curl -H "Authorization: Bearer 1234"  \
   -X POST "localhost:8000/create_model" \
   -H 'Content-Type: application/json' \
   -d '{
+  "model_id": "your_model_id"
+  "model_did": "your_model_did"
   "base_model": "your_base_model_value",
   "prompt": "your_prompt_value"
 }'
 """
 class CreateModelRequest(BaseModel):
+    model_id: str
+    model_did: str
     base_model: str
     prompt: str
 
 @app.post("/create_model")
 def create_model(request: CreateModelRequest):
-    model_id = db.insert_data(request.base_model, request.prompt)
+    model_id = db.insert_data(request.model_id, request.model_did, request.base_model, request.prompt)
     return {"model_id": model_id}
 
 """

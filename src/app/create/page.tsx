@@ -10,7 +10,7 @@ const Create = () => {
   const [aiModels, setAiModels] = useState([]);
   const [showModal , setShowModal] = useState(false);
   const [modelDid, setModelDid] = useState(null)
-  const { getModelList, isError: isCreateModelError, createModel} = useCreateModel(
+  const { getModelList, isError: isCreateModelError, createModel, createModelId} = useCreateModel(
     process.env.NEXT_PUBLIC_BACKEND_URL,
     process.env.NEXT_PUBLIC_BEARER_TOKEN
   );
@@ -31,36 +31,42 @@ const Create = () => {
     setImage(file);
   };
 
+  
+
   const handleCreate = async (e) => {
     setShowModal(true)
     e.preventDefault();
+
+    const modelId = createModelId()
+    console.log("Model Id: ", modelId)
     console.log("Model Name:", modelName);
     console.log("AI Name:", aiName);
     console.log("AI Description:", aiDescription);
     console.log("AI Prompt:", aiPrompt);
     console.log("Subscription ID: ", subscriptionDid);
-    const createResult = await createModel(modelName, aiPrompt)
-    if (isCreateModelError) {
-      console.error("Create Model error");
-      setShowModal(false);
-      return;
-    }
-    const modelId = createResult["model_id"];
-    console.log("Model ID", modelId)
+
+    // Create Service on Nevermind 
     const modelDidTemp = await payments.createService(
       aiName,
       aiDescription,
       process.env.NEXT_PUBLIC_BACKEND_URL,
       modelId,
       subscriptionDid,
-      BigInt(price) * BigInt(10**6),
+      BigInt(price) * BigInt(10 ** 6),
       parseInt(amountOfCredits),
       parseInt(duration)
     );
+
+    // Store  in DB
+    const createResult = await createModel(modelId, modelDidTemp, modelName, aiPrompt)
+    if (isCreateModelError) {
+      console.error("Create Model error");
+      setShowModal(false);
+      return;
+    }
+    
     console.log("ModelDid: ", modelDidTemp);
     setModelDid(modelDidTemp)
-    // payments.goToServiceDetails(modelDid)
-    
   };
 
   useEffect(() => {

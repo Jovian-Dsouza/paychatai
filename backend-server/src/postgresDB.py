@@ -23,6 +23,7 @@ class DataBase:
         create_table_query = """
             CREATE TABLE IF NOT EXISTS model_data (
                 model_id VARCHAR(36) PRIMARY KEY,
+                model_did VARCHAR(255) UNIQUE NOT NULL,
                 base_model VARCHAR(255) NOT NULL,
                 prompt TEXT NOT NULL
             );
@@ -54,17 +55,16 @@ class DataBase:
         # Commit the transaction
         self.conn.commit()
 
-    def insert_data(self, base_model, prompt):
+    def insert_data(self, model_id, model_did, base_model, prompt):
         # Define the SQL statement to insert data into the table
-        model_id = str(uuid.uuid4())
         insert_query = """
-            INSERT INTO model_data (model_id, base_model, prompt) 
-            VALUES (%s, %s, %s);
+            INSERT INTO model_data (model_id, model_did, base_model, prompt) 
+            VALUES (%s, %s, %s, %s);
         """
         
         # Execute the SQL statement
         try:
-            self.cur.execute(insert_query, (model_id, base_model, prompt))
+            self.cur.execute(insert_query, (model_id, model_did, base_model, prompt))
             print("Data inserted successfully")
         except psycopg2.Error as e:
             print("Error inserting data:", e)
@@ -110,7 +110,7 @@ class DataBase:
     def get_model_info_by_id(self, model_id):
         # Define the SQL statement to select the prompt and base_model for a given model_id
         select_query = """
-            SELECT prompt, base_model FROM model_data WHERE model_id = %s;
+            SELECT model_did, prompt, base_model FROM model_data WHERE model_id = %s;
         """
 
         # Execute the SQL statement
@@ -118,8 +118,8 @@ class DataBase:
             self.cur.execute(select_query, (model_id,))
             row = self.cur.fetchone()
             if row:
-                prompt, base_model = row
-                return {"prompt": prompt, "base_model": base_model}
+                model_did, prompt, base_model = row
+                return {"model_did": model_did, "prompt": prompt, "base_model": base_model}
             else:
                 print(f"No data found for model_id {model_id}")
                 return None

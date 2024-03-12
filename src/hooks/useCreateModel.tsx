@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export function useCreateModel(endpoint: String, token: String) {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +27,7 @@ export function useCreateModel(endpoint: String, token: String) {
     }
   }
 
-  async function createModel(baseModel: String, prompt: String) {
+  async function createModel(modelId: String, modelDid: String, baseModel: String, prompt: String) {
     setIsLoading(true);
     setIsError(false);
     try {
@@ -37,6 +38,8 @@ export function useCreateModel(endpoint: String, token: String) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          model_id: modelId,
+          model_did: modelDid,
           base_model: baseModel,
           prompt: prompt,
         }),
@@ -56,10 +59,15 @@ export function useCreateModel(endpoint: String, token: String) {
     }
   }
 
+  const createModelId = () => {
+    return uuidv4();
+  };
+
   return {
     isLoading,
     isError,
     getModelList,
     createModel,
+    createModelId,
   };
 }
