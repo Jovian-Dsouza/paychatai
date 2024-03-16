@@ -5,16 +5,12 @@ import { Chat } from "@/components/Chat";
 import Image from "next/image";
 import { useEffect, useRef, useContext } from "react";
 import { AppContext } from "@/data/AppContext";
-import { useChat } from "@/hooks/useChat"
-// import { getChatResponse } from "@/services/backend_api";
-// import { getChatResponse } from "@/services/dummy_server";
-
-
+import { useChat } from "@/hooks/useChat";
 
 export default function ChatPage({ params }: { params: { modelId: string } }) {
-  const { payments } = useContext(AppContext)
+  const { payments } = useContext(AppContext);
   const [messages, setMessages] = useState([]);
-  const { isLoading, isError, getChatResponse } = useChat(
+  const { isLoading, isError, getChatResponse, modelDid } = useChat(
     process.env.NEXT_PUBLIC_BACKEND_URL,
     params.modelId,
     process.env.NEXT_PUBLIC_BEARER_TOKEN
@@ -27,11 +23,11 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
     ]);
   }
 
-  function getMessageObject(input, isSystemMessage){
+  function getMessageObject(input, isSystemMessage) {
     return {
-        "role": isSystemMessage ? "assistant" : "user",
-        "content": input,
-      }
+      role: isSystemMessage ? "assistant" : "user",
+      content: input,
+    };
   }
 
   const chatRef = useRef(null);
@@ -43,13 +39,15 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
     }
   }, [messages]);
 
+
   async function handleChatInput(input) {
     console.log("Chat input: " + input);
     addMessage(input, false);
     try {
-      const severMessage = await getChatResponse(
-        [...messages, getMessageObject(input, false)] 
-      );
+      const severMessage = await getChatResponse([
+        ...messages,
+        getMessageObject(input, false),
+      ]);
       addMessage(severMessage, true);
     } catch (error) {
       console.error("Error handling chat input:", error);

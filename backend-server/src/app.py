@@ -131,3 +131,24 @@ def delete_model(model_id: str):
     # Call the delete_by_model_id method to delete the model by its ID
     db.delete_by_model_id(model_id)
     return {"message": f"Model with ID {model_id} deleted successfully"}
+
+
+"""
+curl -H "Authorization: Bearer 1234"  \
+  -X POST "localhost:8000/get_model_did/" \
+  -H 'Content-Type: application/json' \
+   -d '{
+        "model_id":  "ee2461a6-27ec-4146-89c6-11579aaa36ab"
+   }'
+"""
+class ModelRequest(BaseModel):
+    model_id: str
+@app.post("/get_model_did/")
+def get_model_did(model_request: ModelRequest):
+    model_info = db.get_model_info_by_id(model_request.model_id)
+    print(model_request.model_id)
+
+    if model_info is None or model_info['base_model'] is None:
+        raise HTTPException(status_code=404, detail="Base model not found for the specified model_id")
+    
+    return {"model_id": model_request.model_id, "model_did": model_info['model_did']}
