@@ -32,13 +32,6 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
 
   const chatRef = useRef(null);
 
-  useEffect(() => {
-    // Scroll to the bottom of the chat when messages change
-    if (chatRef.current) {
-      chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  }, [messages]);
-
 
   async function handleChatInput(input) {
     console.log("Chat input: " + input);
@@ -53,6 +46,13 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
       console.error("Error handling chat input:", error);
     }
   }
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat when messages change
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [messages]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">

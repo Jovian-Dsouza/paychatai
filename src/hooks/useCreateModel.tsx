@@ -7,10 +7,9 @@ export function useCreateModel(endpoint: String, token: String) {
 
   async function getModelList() {
     try {
-      const response = await fetch(`${endpoint}/model_list`, {
-        method: "POST",
+      const response = await fetch(`/api/model_list`, {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
