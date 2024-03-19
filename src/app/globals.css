@@ -9,3 +9,10 @@
     transition-all duration-200 ease-out
   }
 }
+
+@layer base {
+  html {
+    font-family: Urbanist, sans-serif;
+		scroll-behavior: smooth;
+  }
+}

@@ -1,12 +1,14 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { menuLinks } from "@/data/constants";
 import { AppContext } from "@/data/AppContext";
 import { useContext, useEffect } from "react";
+import Container from "./Container";
+import { usePathname } from "next/navigation";
 
 function Header() {
   const { payments } = useContext(AppContext);
+  const pathname = usePathname();
 
   const handleLoginButton = () => {
     if (payments.isLoggedIn) {
@@ -17,34 +19,55 @@ function Header() {
   };
 
   return (
-    <div className="bg-black sticky top-0 z-30 flex justify-center items-center px-20 py-3">
-      <div className="flex justify-between items-center w-full text-sm max-w-6xl">
-        <Link
-          href="/"
-          className={`flex items-center space-x-2 font-bold text-lg text-white`}
-        >
-          {/* <Image src="/logo.svg" alt="NVM Chat Logo" width={40} height={40} /> */}
-          <div className="text-2xl">NVM Chat</div>
-        </Link>
-        <div className="flex justify-center items-center space-x-6">
-          {menuLinks.map((link, index) => (
+    <nav className="z-10 w-full absolute">
+      <Container>
+        <div className="flex flex-wrap items-center justify-between py-2 gap-6 md:py-4 md:gap-0 relative">
+          <div className="relative z-20 w-full flex justify-between lg:w-max md:px-0">
             <Link
-              href={link.href}
-              className={`text-white font-semibold underline-offset-8 hover:underline`}
-              key={index}
+              href="/"
+              aria-label="logo"
+              className="flex space-x-2 items-center"
             >
-              {link.text}
+              <div aria-hidden="true" className="flex space-x-1">
+                <div className="h-4 w-4 rounded-full bg-gray-900 dark:bg-white"></div>
+                <div className="h-6 w-2 bg-primary"></div>
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                PayChatAI
+              </span>
             </Link>
-          ))}
-          <button
-            onClick={handleLoginButton}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg"
-          >
-            {payments.isLoggedIn ? "Log Out" : "Log In"}
-          </button>
+          </div>
+
+          <div className="flex-col z-20 flex-wrap gap-6 p-8 rounded-3xl border border-gray-100 bg-white shadow-2xl shadow-gray-600/10 justify-end w-full invisible opacity-0 translate-y-1 absolute top-full left-0 transition-all duration-300 scale-95 origin-top lg:relative lg:scale-100 lg:peer-checked:translate-y-0 lg:translate-y-0 lg:flex lg:flex-row lg:items-center lg:gap-0 lg:p-0 lg:bg-transparent lg:w-7/12 lg:visible lg:opacity-100 lg:border-none peer-checked:scale-100 peer-checked:opacity-100 peer-checked:visible lg:shadow-none dark:shadow-none dark:border-gray-700">
+            {(!pathname.includes("/chats")) && <div className="text-gray-600 dark:text-gray-300 lg:pr-4 lg:w-auto w-full lg:pt-0">
+              <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
+                {menuLinks.map((link, index) => (
+                  <li key={index}> 
+                    <Link
+                      href={link.href}
+                      className="block md:px-4 transition hover:text-primary"
+                    >
+                      <span>{link.text}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>}
+
+            <div className="mt-12 lg:mt-0">
+              <button
+                onClick={handleLoginButton}
+                className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+              >
+                <span className="relative text-sm font-semibold text-white">
+                  {payments.isLoggedIn ? "Log Out" : "Log In"}
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </Container>
+    </nav>
   );
 }
 

@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import "./globals.css";
 import { SideBar } from "@/components/SideBar";
 import { ClientProvider } from "@/components/ClientProvider";
 import Header from "@/components/Header";
 import { AppContextProvider } from "@/data/AppContext";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
+const urbanist = Urbanist({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700']
+})
 
 export const metadata: Metadata = {
-  title: "Nevermined Chat",
-  description: "Nevermined Chat",
+  title: "PayChatAI",
+  description: "PayChatAI",
 };
 
 export default function RootLayout({
@@ -20,12 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={urbanist.className}>
         <div className="flex flex-col h-screen">
           <ClientProvider />
           <AppContextProvider>
             <Header />
-            <div className="flex-1 bg-[#343541]">{children}</div>
+            <div className="bg-gray-900">
+              {children}
+              <Footer />
+            </div>
           </AppContextProvider>
         </div>
       </body>

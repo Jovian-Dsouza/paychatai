@@ -6,7 +6,7 @@ function Message({ message }: any) {
   const isSystemMessage = message.role == "assistant"
 
   return (
-    <div className={`py-5 text-white ${isSystemMessage && "bg-[#434654]"}`}>
+    <div className={`py-5 text-white ${isSystemMessage && "bg-[#282e49]"}`}>
       <div className="flex space-x-5 px-10 max-w-2xl mx-auto">
         <Image
           src={!isSystemMessage ? "/user_logo.png" : "/chat_logo.png"}
