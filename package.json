@@ -16,6 +16,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-markdown": "^9.0.1",
+    "recoil": "^0.7.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
