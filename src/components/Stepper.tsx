@@ -3,10 +3,12 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { currentStepAtom } from "@/store/atoms/createPageAtoms";
 
 export function Stepper() {
-  const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom)
+  const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom);
 
   const handleStepChange = (step) => {
-    setCurrentStep(step);
+    if (step < currentStep) {
+      setCurrentStep(step);
+    }
   };
 
   return (

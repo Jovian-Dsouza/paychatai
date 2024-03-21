@@ -1,6 +1,6 @@
 import React from "react";
 import { Step } from "./Stepper";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import {
   subscriptionAtom,
   priceAtom,
@@ -9,6 +9,7 @@ import {
   chargeTypeAtom,
   minCreditsAtom,
   maxCreditsAtom,
+  showMonetizationEmptyFieldErrorAtom,
 } from "@/store/atoms/createPageAtoms";
 import { TextInput } from "./TextInput";
 import { SelectInput } from "./SelectInput";
@@ -26,6 +27,9 @@ function MonetizationFormStep() {
   const [maxCredits, setMaxCredits] = useRecoilState(maxCreditsAtom);
   const [duration, setDuration] = useRecoilState(durationAtom);
   const [chargeType, setChargeType] = useRecoilState(chargeTypeAtom);
+  const showEmptyFieldError = useRecoilValue(
+    showMonetizationEmptyFieldErrorAtom
+  );
 
   return (
     <Step targetSteps={[2]}>
@@ -104,7 +108,7 @@ function MonetizationFormStep() {
           Create New Subscription
         </label>
       </div> */}
-      
+
       {/* Subscription */}
       <TextInput
         label="Subscription ID"
@@ -112,6 +116,7 @@ function MonetizationFormStep() {
         onChange={(e) => setSubscription(e.target.value)}
         placeholder="Enter Subscription ID"
         id="subscription"
+        showError={showEmptyFieldError}
       />
 
       <div className="flex justify-between items-center space-x-4">

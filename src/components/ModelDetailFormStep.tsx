@@ -1,27 +1,40 @@
 import React from 'react'
 import { Step } from '@/components/Stepper'
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import {
   imageAtom,
   baseModelAtom,
   nameAtom,
   descAtom,
   promptAtom,
+  imageUrlAtom,
+  showModelDetailEmptyFieldErrorAtom,
 } from "@/store/atoms/createPageAtoms";
 import { TextInput } from './TextInput';
+import { TextArea } from './TextArea';
 import { SelectInput } from './SelectInput';
 
 function ModelDetailFormStep({ aiModels }) {
   const setImage = useSetRecoilState(imageAtom);
+  const setImageUrl = useSetRecoilState(imageUrlAtom)
   const [baseModel, setBaseModel] = useRecoilState(baseModelAtom);
   const [name, setName] = useRecoilState(nameAtom);
   const [desc, setDesc] = useRecoilState(descAtom);
   const [prompt, setPrompt] = useRecoilState(promptAtom);
-  
+  const showEmptyFieldError = useRecoilValue(showModelDetailEmptyFieldErrorAtom)
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setImage(file);
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageUrl(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -34,6 +47,7 @@ function ModelDetailFormStep({ aiModels }) {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter AI Name"
           id="name"
+          showError={showEmptyFieldError}
         />
 
         {/* Base Model Drop Box */}
@@ -47,40 +61,23 @@ function ModelDetailFormStep({ aiModels }) {
       </div>
 
       {/* AI Description */}
-      <div className="mb-4">
-        <label
-          htmlFor="aiDescription"
-          className="block text-sm font-bold text-gray-100"
-        >
-          Description
-        </label>
-        <textarea
-          id="aiDescription"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          placeholder="Enter AI Description"
-          rows={4} // Set the number of visible rows
-          className="createInput"
-        />
-      </div>
+      <TextArea
+        label="Description"
+        value={desc}
+        onChange={(e) => setDesc(e.target.value)}
+        placeholder="Enter AI Description"
+        id="desc"
+        showError={showEmptyFieldError}
+      />
 
       {/* AI Prompt */}
-      <div className="mb-4">
-        <label
-          htmlFor="aiPrompt"
-          className="block text-sm font-bold text-gray-100"
-        >
-          Prompt
-        </label>
-        <textarea
-          id="aiPrompt"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter AI Prompt"
-          rows={4} // Set the number of visible rows
-          className="createInput"
-        />
-      </div>
+      <TextArea
+        label="Prompt"
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder="Enter AI Prompt"
+        id="prompt"
+      />
 
       {/* Upload Image */}
       <div className="mb-6">
@@ -95,6 +92,7 @@ function ModelDetailFormStep({ aiModels }) {
           aria-describedby="image_upload_help"
           id="image_upload"
           type="file"
+          accept="image/*"
           onChange={handleImageUpload}
         />
         <p
