@@ -60,23 +60,18 @@ const Create = () => {
     const modelId = createModelId();
     // Create Service on Nevermind
     const modelDidTemp = await payments.createService(
-      aiName,
-      aiDescription,
+      name,
+      desc,
       process.env.NEXT_PUBLIC_BACKEND_URL,
       modelId,
-      subscriptionDid,
+      subscription,
       BigInt(price) * BigInt(10 ** 6),
-      parseInt(amountOfCredits),
-      parseInt(duration)
+      amountOfCredits,
+      duration
     );
 
     // Store  in DB
-    const createResult = await createModel(
-      modelId,
-      modelDidTemp,
-      modelName,
-      aiPrompt
-    );
+    const createResult = await createModel(modelId, modelDidTemp);
     if (isCreateModelError) {
       console.error("Create Model error");
       setShowModal(false);
@@ -85,7 +80,7 @@ const Create = () => {
 
     console.log("ModelDid: ", modelDidTemp);
     setModelDid(modelDidTemp);
-    resetAllAtoms()
+    resetAllAtoms();
   };
 
   useEffect(() => {

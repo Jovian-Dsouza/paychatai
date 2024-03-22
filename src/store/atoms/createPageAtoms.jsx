@@ -87,7 +87,7 @@ export const subscriptionAtom = atom({
 
 export const priceAtom = atom({
   key: "priceAtom",
-  default: null,
+  default: 0,
 });
 
 export const amountOfCreditsAtom = atom({
