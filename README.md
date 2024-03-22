@@ -1,6 +1,6 @@
-# Nevermind Chat
+# PayChatAI
 
-Nevermind Chat is a platform that empowers users to create, instruct, and monetize GPT models effortlessly. With our user-friendly interface, you can seamlessly craft and fine-tune your own ChatGPT-like models tailored to your specific needs. Leveraging Nevermind's integrated payment widget, creators can monetize their models with ease.
+PayChatAI is a platform that empowers users to create, instruct, and monetize GPT models effortlessly. With our user-friendly interface, you can seamlessly craft and fine-tune your own ChatGPT-like models tailored to your specific needs. Leveraging Nevermind's integrated payment widget, creators can monetize their models with ease.
 
 ## Features
 - Create and fine-tune your own ChatGPT-like models
@@ -9,12 +9,11 @@ Nevermind Chat is a platform that empowers users to create, instruct, and moneti
 - User-friendly interface for easy model creation and testing
 
 ## Demo
-Check out the demo of Nevermind Chat: [here](https://youtu.be/4sHzWIT5l9w)
+Check out the demo of PayChatAI: [here](https://youtu.be/4sHzWIT5l9w)
 
 ## Usage
-To use Nevermind Chat, visit:
-- [nevermined-chat.vercel.app](https://nevermined-chat.vercel.app)
-- [nevermined-chat.onrender.com](https://nevermined-chat.onrender.com)
+To use PayChatAI, visit:
+- [https://paychatai.vercel.app/](https://paychatai.vercel.app/)
 
 ## Getting Started
 1. Clone this repository.
