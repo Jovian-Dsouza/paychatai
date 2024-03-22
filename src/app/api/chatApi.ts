@@ -1,10 +1,13 @@
 import OpenAI from "openai";
 
 export const openRouter = new OpenAI({
-    baseURL: process.env.OPENROUTER_BASE_URL,
-    apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: process.env.OPENROUTER_BASE_URL,
+  apiKey: process.env.OPENROUTER_API_KEY,
+  defaultHeaders: {
+    "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL, // Optional, for including your app on openrouter.ai rankings.
+    "X-Title": process.env.NEXT_PUBLIC_APP_TITLE, // Optional. Shows in rankings on openrouter.ai.
+  },
 });
-
 
 export function listModels() {
   const modelData = {
@@ -16,4 +19,13 @@ export function listModels() {
     "Google: Gemma 7B (free)": "google/gemma-7b-it:free",
   };
   return Object.keys(modelData).map((name) => ({ name, id: modelData[name] }));
+}
+
+export async function getChatResponse(model: string, messages) {
+  // Uuse OpenRouter object
+  const completion = await openRouter.chat.completions.create({
+    messages,
+    model,
+  });
+  return completion.choices[0].message.content;
 }
