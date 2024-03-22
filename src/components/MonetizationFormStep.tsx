@@ -46,7 +46,7 @@ function MonetizationFormStep() {
         <SelectInput
           label="Charge Type"
           value={chargeType}
-          onChange={(e) => setChargeType(e.target.value)}
+          onChange={(e) => setChargeType(e)}
           options={serviceChargeTypeList}
           id="charge_type"
         />
@@ -54,25 +54,28 @@ function MonetizationFormStep() {
           <TextInput
             label="Credits"
             value={amountOfCredits}
-            onChange={(e) => setAmountOfCredits(e.target.value)}
+            onChange={(e) => setAmountOfCredits(e)}
             placeholder="Enter Credits"
             id="credits"
+            type="int"
           />
         ) : (
           <div className="flex items-center justify-between space-x-4">
             <TextInput
               label="Min Credits"
               value={minCredits}
-              onChange={(e) => setMinCredits(e.target.value)}
+              onChange={(e) => setMinCredits(e)}
               placeholder="Min Credits"
               id="min_credits"
+              type="int"
             />
             <TextInput
               label="Max Credits"
               value={maxCredits}
-              onChange={(e) => setMaxCredits(e.target.value)}
+              onChange={(e) => setMaxCredits(e)}
               placeholder="Max Credits"
               id="max_credits"
+              type="int"
             />
           </div>
         )}
@@ -86,9 +89,10 @@ function MonetizationFormStep() {
       <TextInput
         label="Duration (Days)"
         value={duration}
-        onChange={(e) => setDuration(e.target.value)}
+        onChange={(e) => setDuration(e)}
         placeholder="Enter Duration"
         id="duration"
+        type="int"
       />
 
       <div className="pt-2"></div>
@@ -113,7 +117,7 @@ function MonetizationFormStep() {
       <TextInput
         label="Subscription ID"
         value={subscription}
-        onChange={(e) => setSubscription(e.target.value)}
+        onChange={(e) => setSubscription(e)}
         placeholder="Enter Subscription ID"
         id="subscription"
         showError={showEmptyFieldError}
@@ -124,7 +128,7 @@ function MonetizationFormStep() {
         {/* <TextInput
           label="Price (USD)"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setPrice(e)}
           placeholder="Enter Price"
           id="price"
         /> */}

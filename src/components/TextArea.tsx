@@ -1,6 +1,6 @@
 export function TextArea({ label, value, onChange, placeholder, id, showError=false }) {
   const handleChange = (e) => {
-    onChange(e);
+    onChange(e.target.value);
   };
 
   return (

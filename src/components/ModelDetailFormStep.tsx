@@ -44,7 +44,7 @@ function ModelDetailFormStep({ aiModels }) {
         <TextInput
           label="Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e)}
           placeholder="Enter AI Name"
           id="name"
           showError={showEmptyFieldError}
@@ -54,7 +54,7 @@ function ModelDetailFormStep({ aiModels }) {
         <SelectInput
           label="Model"
           value={baseModel}
-          onChange={(e) => setBaseModel(e.target.value)}
+          onChange={(e) => setBaseModel(e)}
           options={aiModels}
           id="model"
         />
@@ -64,7 +64,7 @@ function ModelDetailFormStep({ aiModels }) {
       <TextArea
         label="Description"
         value={desc}
-        onChange={(e) => setDesc(e.target.value)}
+        onChange={(e) => setDesc(e)}
         placeholder="Enter AI Description"
         id="desc"
         showError={showEmptyFieldError}
@@ -74,7 +74,7 @@ function ModelDetailFormStep({ aiModels }) {
       <TextArea
         label="Prompt"
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(e) => setPrompt(e)}
         placeholder="Enter AI Prompt"
         id="prompt"
       />
