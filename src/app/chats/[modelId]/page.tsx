@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
-import { ChatInput } from "@/components/ChatInput";
-import { Chat } from "@/components/Chat";
-import Image from "next/image";
 import { useEffect, useRef, useContext } from "react";
 import { AppContext } from "@/data/AppContext";
 import { useChat } from "@/hooks/useChat";
+import ChatContainer from "@/components/ChatContainer";
 
 export default function ChatPage({ params }: { params: { modelId: string } }) {
   const { payments } = useContext(AppContext);
@@ -15,6 +13,7 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
     params.modelId,
     process.env.NEXT_PUBLIC_BEARER_TOKEN
   );
+  const [demoPrompts, setDemoPrompts] = useState([])
 
   function addMessage(input, isSystemMessage) {
     setMessages((prevMessages) => [
@@ -57,23 +56,16 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
 
   return (
     <main className="h-screen pt-20">
-      <div className="flex flex-col h-full overflow-hidden">
-        <div className="flex-1 overflow-y-auto">
-          <Chat
-            messages={messages}
-            isLoading={isLoading}
-            isError={isError}
-            isLoggedIn={payments.isLoggedIn}
-          />
-        </div>
-        <div className="sticky bottom-0 w-full">
-          <ChatInput
-            onSubmit={handleChatInput}
-            isLoading={isLoading}
-            isLoggedIn={payments.isLoggedIn}
-          />
-          <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
-        </div>
+      <div className="flex flex-col h-full">
+        <ChatContainer
+          messages={messages}
+          setMessages={setMessages}
+          isLoading={isLoading}
+          isError={isError}
+          isLoggedIn={payments.isLoggedIn}
+          handleChatInput={handleChatInput}
+          demoPrompts={demoPrompts}
+        />
       </div>
     </main>
   );

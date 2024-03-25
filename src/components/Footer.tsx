@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 
 export function Footer() {
   const pathname = usePathname();
-  if(pathname.includes("/chats")){
-    return null
+  if (pathname.includes("/chats") || pathname.includes("/playground")) {
+    return null;
   }
   return (
     <footer className="bg-white rounded-lg shadow  dark:bg-gray-800">

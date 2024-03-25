@@ -1,4 +1,13 @@
-export function TextArea({ label, value, onChange, placeholder, id, showError=false }) {
+
+export function TextArea({
+  label,
+  value,
+  onChange,
+  placeholder,
+  id,
+  showError = false,
+  rows = 4,
+}) {
   const handleChange = (e) => {
     onChange(e.target.value);
   };
@@ -14,7 +23,7 @@ export function TextArea({ label, value, onChange, placeholder, id, showError=fa
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
-          rows={4} // Set the number of visible rows
+          rows={rows} // Set the number of visible rows
           className={`createInput ${
             value != null && !value.trim() && showError ? "border-red-500" : ""
           }`} // Add border color if empty

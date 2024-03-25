@@ -1,15 +1,11 @@
 "use client";
 import { useState } from "react";
-import { ChatInput } from "@/components/ChatInput";
-import { Chat } from "@/components/Chat";
-import { useEffect, useRef, useContext } from "react";
-import { AppContext } from "@/data/AppContext";
+import { useEffect } from "react";
 import { usePlayground } from "@/hooks/usePlayground";
 import { ModelSidebar } from "@/components/ModelSideBar";
-
+import ChatContainer from "@/components/ChatContainer";
 
 export default function PlaygroundPage() {
-  const { payments } = useContext(AppContext);
   const [messages, setMessages] = useState([]);
   const [modelList, setModelList] = useState([]);
   const [baseModel, setBaseModel] = useState("");
@@ -18,6 +14,7 @@ export default function PlaygroundPage() {
     baseModel,
     prompt
   );
+  const [demoPrompts, setDemoPrompts] = useState([]);
 
   async function getModelList() {
     try {
@@ -54,15 +51,6 @@ export default function PlaygroundPage() {
     };
   }
 
-  const chatRef = useRef(null);
-
-  useEffect(() => {
-    // Scroll to the bottom of the chat when messages change
-    if (chatRef.current) {
-      chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  }, [messages]);
-
   useEffect(() => {
     (async () => {
       const modelListTmp = await getModelList();
@@ -71,9 +59,9 @@ export default function PlaygroundPage() {
     })();
   }, []);
 
-  useEffect(() => {
-    console.log("Using base model: ", baseModel);
-  }, [baseModel]);
+  // useEffect(() => {
+  //   console.log("Using base model: ", baseModel);
+  // }, [baseModel]);
 
   async function handleChatInput(input) {
     console.log("Chat input: " + input);
@@ -93,31 +81,23 @@ export default function PlaygroundPage() {
   return (
     <main className="h-screen pt-20">
       <div className="flex h-full">
-        <div className="flex flex-col h-full w-full overflow-hidden">
-          <div className="flex-1 overflow-y-auto">
-            <Chat
-              messages={messages}
-              isLoading={isLoading}
-              isError={isError}
-              isLoggedIn={payments.isLoggedIn}
-            />
-          </div>
-          <div className="sticky bottom-0 w-full">
-            <ChatInput
-              onSubmit={handleChatInput}
-              isLoading={isLoading}
-              isLoggedIn={payments.isLoggedIn}
-            />
-            <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
-          </div>
-        </div>
-
+        <ChatContainer
+          messages={messages}
+          setMessages={setMessages}
+          isLoading={isLoading}
+          isError={isError}
+          isLoggedIn={true}
+          handleChatInput={handleChatInput}
+          demoPrompts={demoPrompts}
+        />
         {/* Sidebar */}
-        <div className="hidden sm:block w-1/4 ">
+        <div className="hidden sm:block w-1/4 pb-4 pr-4 ">
           <ModelSidebar
             models={modelList}
-            onSelectModel={setBaseModel}
-            onEnterPrompt={setPrompt}
+            baseModel={baseModel}
+            prompt={prompt}
+            setBaseModel={setBaseModel}
+            setPrompt={setPrompt}
           />
         </div>
       </div>
