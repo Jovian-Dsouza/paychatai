@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
-import prisma from "@/lib/prisma";
-import { getChatResponse } from "../../chatApi";
+import { getChatResponse } from "../chatApi";
 
 /*
 curl -H "Authorization: Bearer 1234"  \
@@ -17,39 +16,32 @@ curl -H "Authorization: Bearer 1234"  \
 */
 export async function POST(
   req: Request,
-  { params }: { params: { modelId: string } }
 ) {
   const useHeader = headers(req);
   const authToken = (useHeader.get("authorization") || "").split("Bearer ")[1];
 
   if (authToken && authToken === process.env.NEXT_PUBLIC_AUTH_TOKEN) {
     try {
-      const modelId = params.modelId;
       const body = await req.json();
-      const { messages } = body;
+      const { messages, prompt, base_model } = body;
 
-      // Fetch model information from the database using Prisma
-      const modelInfo = await prisma.modelData.findUnique({
-        where: { model_id: modelId },
-      });
-      //   console.log("modelInfo", modelInfo)
-
-      // Check if model information exists and base model is defined
-      if (!modelInfo || !modelInfo.base_model) {
-        return Response.json({
-          error: "Base model not found for the specified model_id",
-        }, {status: 404});
+      if (!base_model) {
+        return Response.json(
+          {
+            error: "Base model not found for the specified model_id",
+          },
+          { status: 404 }
+        );
       }
-
-      if (modelInfo.prompt) {
+      if (prompt) {
         // Insert prompt message if available, at the start of message array
-        messages.unshift({ role: "system", content: modelInfo.prompt });
+        messages.unshift({ role: "system", content: prompt });
       }
 
       //   console.log("messages: ", messages);
-      const result = await getChatResponse(modelInfo.base_model, messages);
+      const result = await getChatResponse(base_model, messages);
 
-      return Response.json({ modelId, result });
+      return Response.json({ result });
     } catch (error) {
       console.error("Error creating model data:", error);
       return Response.json({ error: "Internal server error" }, { status: 500 });
