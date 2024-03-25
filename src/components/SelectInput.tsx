@@ -1,6 +1,6 @@
 export function SelectInput({ label, value, onChange, options, id }) {
   return (
-    <div className="mb-4 w-1/2">
+    <div className="mb-4">
       <label htmlFor={id} className="block text-sm font-bold text-gray-100">
         {label}
       </label>
