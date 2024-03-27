@@ -31,6 +31,7 @@ function ChatContainer({
           setMessages={setMessages}
           demoPrompts={demoPrompts}
         />
+        <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
       </div>
       <div className="sticky bottom-0 w-full">
         <ChatInput
@@ -38,7 +39,6 @@ function ChatContainer({
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
         />
-        <div style={{ float: "left", clear: "both" }} ref={chatRef}></div>
       </div>
     </div>
   );
