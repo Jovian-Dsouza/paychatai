@@ -27,7 +27,8 @@ import {
 
 } from "@/store/atoms/createPageAtoms";
 
-export function useCreateModel(endpoint: String, token: String) {
+export function useCreateModel() {
+  const token = process.env.NEXT_PUBLIC_AUTH_TOKEN
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const name = useRecoilValue(nameAtom);

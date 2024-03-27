@@ -30,15 +30,13 @@ const Create = () => {
   const [aiModels, setAiModels] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modelDid, setModelDid] = useState(null);
+  const [modelId, setModelId] = useState("")
   const {
     getModelList,
     isError: isCreateModelError,
     createModel,
     createModelId,
-  } = useCreateModel(
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-    process.env.NEXT_PUBLIC_BEARER_TOKEN
-  );
+  } = useCreateModel();
   const { payments } = useContext(AppContext);
 
   const image = useRecoilValue(imageAtom);
@@ -58,17 +56,26 @@ const Create = () => {
     e.preventDefault();
 
     const modelId = createModelId();
-    // Create Service on Nevermind
-    const modelDidTemp = await payments.createService(
-      name,
-      desc,
-      process.env.NEXT_PUBLIC_BACKEND_URL,
-      modelId,
-      subscription,
-      BigInt(price) * BigInt(10 ** 6),
-      amountOfCredits,
-      duration
-    );
+    setModelId(modelId)
+
+    let modelDidTemp = "";
+    try {
+      // Create Service on Nevermind
+      modelDidTemp = await payments.createService(
+        name,
+        desc,
+        modelId,
+        subscription,
+        BigInt(price) * BigInt(10 ** 6),
+        amountOfCredits,
+        duration
+      );
+    } catch (error) {
+      console.error("Nevermind Create service", error);
+      setShowModal(false);
+      alert("Error could not create webservice");
+      return;
+    }
 
     // Store  in DB
     const createResult = await createModel(modelId, modelDidTemp);
@@ -78,7 +85,7 @@ const Create = () => {
       return;
     }
 
-    console.log("ModelDid: ", modelDidTemp);
+    // console.log("ModelDid: ", modelDidTemp);
     setModelDid(modelDidTemp);
     resetAllAtoms();
   };
@@ -113,7 +120,7 @@ const Create = () => {
                 </button>
                 <button
                   onClick={() => {
-                    router.push(`/chats/${modelDid}`);
+                    router.push(`/chats/${modelId}`);
                   }}
                   className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600"
                 >
