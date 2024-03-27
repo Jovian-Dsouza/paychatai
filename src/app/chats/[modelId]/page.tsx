@@ -4,6 +4,7 @@ import { useEffect, useRef, useContext } from "react";
 import { AppContext } from "@/data/AppContext";
 import { useChat } from "@/hooks/useChat";
 import ChatContainer from "@/components/ChatContainer";
+import LoginModal from "@/components/LoginModal";
 
 export default function ChatPage({ params }: { params: { modelId: string } }) {
   const { payments } = useContext(AppContext);
@@ -54,6 +55,12 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
   return (
     <main className="h-screen pt-20">
       <div className="flex flex-col h-full">
+        <LoginModal
+          isLoggedIn={payments.isLoggedIn}
+          onClick={() => {
+            payments.login();
+          }}
+        />
         <ChatContainer
           messages={messages}
           setMessages={setMessages}

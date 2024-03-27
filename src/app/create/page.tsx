@@ -24,6 +24,7 @@ import NextStepButton from "@/components/NextStepButton";
 import BackStepButton from "@/components/BackStepButton";
 import CreateButton from "@/components/CreateButton";
 import { ReviewFormStep } from "@/components/ReviewFormStep";
+import LoginModal from "@/components/LoginModal";
 
 const Create = () => {
   const router = useRouter();
@@ -103,6 +104,7 @@ const Create = () => {
   return (
     <div className="w-full min-h-full">
       <div className="flex flex-col mx-auto p-4 mt-20 h-full">
+        <LoginModal isLoggedIn={payments.isLoggedIn} onClick={()=>{payments.login()}}/>
         <TransactionModal show={showModal} showLoading={!modelDid}>
           {modelDid ? (
             <div>
