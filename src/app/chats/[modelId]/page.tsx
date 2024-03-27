@@ -9,11 +9,9 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
   const { payments } = useContext(AppContext);
   const [messages, setMessages] = useState([]);
   const { isLoading, isError, getChatResponse, modelDid } = useChat(
-    process.env.NEXT_PUBLIC_BACKEND_URL,
-    params.modelId,
-    process.env.NEXT_PUBLIC_BEARER_TOKEN
+    params.modelId
   );
-  const [demoPrompts, setDemoPrompts] = useState([])
+  const [demoPrompts, setDemoPrompts] = useState([]);
 
   function addMessage(input, isSystemMessage) {
     setMessages((prevMessages) => [
@@ -37,7 +35,6 @@ export default function ChatPage({ params }: { params: { modelId: string } }) {
       chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [messages]);
-
 
   async function handleChatInput(input) {
     console.log("Chat input: " + input);
