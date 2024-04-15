@@ -1,3 +1,5 @@
+![landing page](imgs/paychatai_landing.png)
+
 # PayChatAI
 
 PayChatAI is a platform that empowers users to create, instruct, and monetize GPT models effortlessly. With our user-friendly interface, you can seamlessly craft and fine-tune your own ChatGPT-like models tailored to your specific needs. Leveraging Nevermind's integrated payment widget, creators can monetize their models with ease.
